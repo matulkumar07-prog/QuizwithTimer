@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizMaster - Interactive Quiz Platform</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Custom styles for a better look and feel */
+        body {
+            background-color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        /* Hide all sections by default */
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        /* Show the active section */
+        .section.active {
+            display: block;
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Custom styles for quiz options */
+        .option-label {
+            display: block;
+            background-color: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+        .option-label:hover {
+            border-color: #4f46e5;
+            background-color: #f0f4f8;
+        }
+        .option-label.selected {
+            background-color: #c7d2fe;
+            border-color: #4f46e5;
+            font-weight: 600;
+        }
+        /* Style for correct/incorrect answers on the results page */
+        .option-label.correct {
+            background-color: #d1fae5;
+            border-color: #10b981;
+        }
+        .option-label.incorrect {
+            background-color: #fee2e2;
+            border-color: #ef4444;
+        }
+
+        /* Hide radio buttons but keep them functional */
+        .option-label input[type="radio"] {
+            display: none;
+        }
+
+        .btn-primary {
+            background-color: #4f46e5;
+        }
+        .btn-primary:hover {
+            background-color: #4338ca;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navigation Bar -->
+    <nav class="bg-indigo-700 shadow-md fixed top-0 left-0 right-0 z-10">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-3">
+                <a class="text-white text-2xl font-bold" href="#home">
+                    <i class="fas fa-brain me-2"></i>QuizMaster
+                </a>
+                <div class="hidden md:flex items-center space-x-4">
+                    <a class="nav-link auth-link text-white hover:text-indigo-200 transition" href="#home"><i class="fas fa-home me-1"></i>Home</a>
+                    <a class="nav-link auth-link text-white hover:text-indigo-200 transition" href="#subjects"><i class="fas fa-book me-1"></i>Subjects</a>
+                    <a class="nav-link auth-link text-white hover:text-indigo-200 transition" href="#scores"><i class="fas fa-trophy me-1"></i>Scores</a>
+                    <a id="login-link" class="nav-link text-white bg-green-500 px-4 py-2 rounded-md hover:bg-green-600 transition" href="#login"><i class="fas fa-sign-in-alt me-1"></i>Login</a>
+                    <a id="logout-link" class="nav-link text-white bg-red-500 px-4 py-2 rounded-md hover:bg-red-600 transition" href="#" style="display: none;"><i class="fas fa-sign-out-alt me-1"></i>Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 mt-20 pt-4 pb-8">
+        <!-- Login Section -->
+        <section id="login" class="section">
+            <div class="flex items-center justify-center py-12">
+                <div class="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
+                    <div class="text-center mb-8">
+                        <h2 class="text-3xl font-bold text-gray-800">Login to QuizMaster</h2>
+                        <p class="text-gray-500">Enter your credentials to start the quiz</p>
+                    </div>
+                    <form id="login-form">
+                        <div class="mb-4">
+                            <label for="username" class="block text-gray-700 font-semibold mb-2">Username</label>
+                            <input type="text" id="username" class="w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" required value="demo">
+                        </div>
+                        <div class="mb-6">
+                            <label for="password" class="block text-gray-700 font-semibold mb-2">Password</label>
+                            <input type="password" id="password" class="w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" required value="password">
+                        </div>
+                        <button type="submit" class="w-full btn-primary text-white font-bold py-3 rounded-lg hover:shadow-lg transition-all">Login</button>
+                         <div class="text-center mt-4">
+                            <small class="text-gray-500">For demo, just click login.</small>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Home Section -->
+        <section id="home" class="section">
+            <div class="text-center py-16">
+                <h1 class="text-5xl font-bold text-gray-800 mb-4">Welcome to QuizMaster</h1>
+                <p class="text-xl text-gray-600 mb-8">Test your knowledge across various subjects with our interactive quiz platform.</p>
+                <div class="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto mb-10">
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <i class="fas fa-clock fa-3x text-indigo-500 mb-3"></i>
+                        <h5 class="text-xl font-semibold mb-2">Timed Quizzes</h5>
+                        <p class="text-gray-500">Challenge yourself with time-limited questions.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <i class="fas fa-chart-line fa-3x text-green-500 mb-3"></i>
+                        <h5 class="text-xl font-semibold mb-2">Score Tracking</h5>
+                        <p class="text-gray-500">Monitor your progress and improvement over time.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <i class="fas fa-graduation-cap fa-3x text-yellow-500 mb-3"></i>
+                        <h5 class="text-xl font-semibold mb-2">Diverse Subjects</h5>
+                        <p class="text-gray-500">A wide range of topics to test your knowledge.</p>
+                    </div>
+                </div>
+                <div>
+                    <a href="#subjects" class="btn-primary text-white font-bold py-3 px-8 rounded-full text-lg shadow-lg hover:shadow-xl transition-all">Get Started</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Subjects Overview Section -->
+        <section id="subjects" class="section">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-gray-800"><i class="fas fa-book me-2"></i>Choose Your Subject</h2>
+            </div>
+            <div id="subject-cards-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Subject cards will be dynamically inserted here -->
+            </div>
+        </section>
+
+        <!-- Quiz Section -->
+        <section id="quiz" class="section">
+            <div class="max-w-3xl mx-auto">
+                <!-- Quiz Header -->
+                <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center text-lg font-semibold text-gray-700">
+                            <i class="fas fa-clock me-2 text-indigo-500"></i>
+                            <span id="timer-display">00:00</span>
+                        </div>
+                        <h5 id="quiz-title" class="text-xl font-bold text-center text-gray-800">Quiz Title</h5>
+                        <div id="question-counter" class="text-lg font-semibold text-gray-700">Question 1/10</div>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 mt-3">
+                        <div id="progress-bar" class="bg-indigo-600 h-2.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Quiz Question Container -->
+                <div id="quiz-container" class="bg-white p-6 sm:p-8 rounded-lg shadow-lg">
+                    <h4 id="question-text" class="text-2xl font-semibold text-gray-800 mb-6">Question text goes here...</h4>
+                    <div id="options-container" class="options">
+                        <!-- Options will be dynamically inserted here -->
+                    </div>
+                    <div class="flex justify-between mt-8">
+                        <button id="prev-btn" class="bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-lg hover:bg-gray-400 transition">Previous</button>
+                        <button id="next-btn" class="btn-primary text-white font-bold py-2 px-6 rounded-lg">Next</button>
+                        <button id="finish-btn" class="bg-green-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-green-600 transition" style="display: none;">Finish</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Scores/Results Section -->
+        <section id="scores" class="section">
+            <div id="results-container" class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-lg text-center">
+                 <i class="fas fa-trophy fa-4x text-yellow-400 mb-4"></i>
+                 <h3 class="text-4xl font-bold text-gray-800">Quiz Completed!</h3>
+                 <p id="results-subject" class="text-xl text-gray-600 mt-2">Results</p>
+                 
+                 <div class="grid md:grid-cols-3 gap-6 my-8">
+                     <div class="bg-indigo-100 p-4 rounded-lg">
+                         <h4 class="text-lg font-semibold text-indigo-800">Score</h4>
+                         <p id="results-score" class="text-4xl font-bold text-indigo-600">0%</p>
+                     </div>
+                     <div class="bg-green-100 p-4 rounded-lg">
+                         <h4 class="text-lg font-semibold text-green-800">Correct</h4>
+                         <p id="results-correct" class="text-4xl font-bold text-green-600">0/0</p>
+                     </div>
+                     <div class="bg-red-100 p-4 rounded-lg">
+                         <h4 class="text-lg font-semibold text-red-800">Time Taken</h4>
+                         <p id="results-time" class="text-4xl font-bold text-red-600">0s</p>
+                     </div>
+                 </div>
+
+                 <div id="review-answers-container" class="text-left mt-8">
+                    <h4 class="text-2xl font-bold text-gray-800 mb-4 text-center">Review Your Answers</h4>
+                    <!-- Review questions will be inserted here -->
+                 </div>
+                 
+                 <div class="mt-8">
+                     <a href="#subjects" class="btn-primary text-white font-bold py-3 px-6 rounded-lg me-3">Try Another Quiz</a>
+                     <a href="#home" class="bg-gray-200 text-gray-800 font-bold py-3 px-6 rounded-lg hover:bg-gray-300">Back to Home</a>
+                 </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- DATA ---
+            const quizData = {
+                mathematics: {
+                    title: "Mathematics",
+                    icon: "fas fa-calculator",
+                    color: "text-indigo-500",
+                    timeLimit: 600, // 10 minutes
+                    questions: [
+                        { q: "What is 25 × 4?", o: ["90", "95", "100", "105"], a: "100" },
+                        { q: "What is the square root of 144?", o: ["11", "12", "13", "14"], a: "12" },
+                        { q: "What is 15% of 200?", o: ["25", "30", "35", "40"], a: "30" },
+                        { q: "What is the value of π (pi) approximately?", o: ["3.12", "3.14", "3.16", "3.18"], a: "3.14" },
+                        { q: "What is 7³?", o: ["343", "294", "421", "392"], a: "343" },
+                        { q: "Solve for x: 2x + 5 = 15", o: ["3", "4", "5", "6"], a: "5" },
+                        { q: "How many sides does a hexagon have?", o: ["5", "6", "7", "8"], a: "6" },
+                        { q: "What is the area of a rectangle with length 10 and width 5?", o: ["15", "25", "50", "100"], a: "50" },
+                        { q: "What is 12 multiplied by 12?", o: ["124", "132", "144", "156"], a: "144" },
+                        { q: "What comes next in the sequence: 2, 4, 8, 16, ...?", o: ["24", "30", "32", "64"], a: "32" }
+                    ]
+                },
+                science: {
+                    title: "Science",
+                    icon: "fas fa-flask",
+                    color: "text-green-500",
+                    timeLimit: 600, // 10 minutes
+                    questions: [
+                        { q: "What is the chemical symbol for water?", o: ["H2O", "CO2", "NaCl", "CH4"], a: "H2O" },
+                        { q: "What planet is closest to the Sun?", o: ["Venus", "Earth", "Mercury", "Mars"], a: "Mercury" },
+                        { q: "What is the powerhouse of the cell?", o: ["Nucleus", "Ribosome", "Mitochondria", "Chloroplast"], a: "Mitochondria" },
+                        { q: "What is the hardest natural substance on Earth?", o: ["Gold", "Iron", "Diamond", "Quartz"], a: "Diamond" },
+                        { q: "What gas do plants absorb from the atmosphere?", o: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Hydrogen"], a: "Carbon Dioxide" },
+                        { q: "What force pulls objects towards the center of the Earth?", o: ["Magnetism", "Friction", "Gravity", "Inertia"], a: "Gravity" },
+                        { q: "How many planets are there in our solar system?", o: ["7", "8", "9", "10"], a: "8" },
+                        { q: "What is the process by which plants make their own food?", o: ["Respiration", "Transpiration", "Photosynthesis", "Germination"], a: "Photosynthesis" },
+                        { q: "Which is the largest animal on Earth?", o: ["African Elephant", "Giraffe", "Blue Whale", "Great White Shark"], a: "Blue Whale" },
+                        { q: "What is the boiling point of water at sea level in Celsius?", o: ["90°C", "100°C", "110°F", "200°F"], a: "100°C" }
+                    ]
+                },
+                history: {
+                    title: "History",
+                    icon: "fas fa-landmark",
+                    color: "text-yellow-500",
+                    timeLimit: 300,
+                    questions: [
+                        { q: "Who was the first President of the United States?", o: ["Abraham Lincoln", "Thomas Jefferson", "George Washington", "John Adams"], a: "George Washington" },
+                        { q: "In which year did World War II end?", o: ["1943", "1944", "1945", "1946"], a: "1945" },
+                        { q: "The ancient city of Rome was built on how many hills?", o: ["Five", "Six", "Seven", "Eight"], a: "Seven" },
+                        { q: "Who wrote the Indian National Anthem?", o: ["Bankim Chandra Chatterjee", "Rabindranath Tagore", "Sarojini Naidu", "Swami Vivekananda"], a: "Rabindranath Tagore" },
+                        { q: "The Battle of Plassey was fought in?", o: ["1757", "1764", "1857", "1782"], a: "1757" },
+                        { q: "The first Mughal emperor of India was?", o: ["Akbar", "Humayun", "Babur", "Shah Jahan"], a: "Babur" },
+                        { q: "Who is known as the 'Iron Man of India'?", o: ["Jawaharlal Nehru", "Mahatma Gandhi", "Subhas Chandra Bose", "Sardar Vallabhbhai Patel"], a: "Sardar Vallabhbhai Patel" },
+                        { q: "The ancient pyramids are located in which country?", o: ["Greece", "Egypt", "Rome", "Mexico"], a: "Egypt" },
+                        { q: "Who discovered America in 1492?", o: ["Vasco da Gama", "Ferdinand Magellan", "Christopher Columbus", "Marco Polo"], a: "Christopher Columbus" },
+                        { q: "The Gupta Empire was famous for?", o: ["Architecture", "Warfare", "Trade with Rome", "Art and Science"], a: "Art and Science" }
+                    ]
+                },
+                geography: {
+                    title: "Geography",
+                    icon: "fas fa-globe-americas",
+                    color: "text-blue-500",
+                    timeLimit: 240,
+                    questions: [
+                        { q: "What is the capital of Japan?", o: ["Beijing", "Seoul", "Tokyo", "Bangkok"], a: "Tokyo" },
+                        { q: "Which is the longest river in the world?", o: ["Amazon", "Nile", "Yangtze", "Mississippi"], a: "Nile" },
+                        { q: "What is the largest desert in the world?", o: ["Sahara", "Gobi", "Arabian", "Antarctic Polar"], a: "Antarctic Polar" },
+                        { q: "Which is the largest ocean on Earth?", o: ["Atlantic", "Indian", "Arctic", "Pacific"], a: "Pacific" },
+                        { q: "Mount Everest is located in which mountain range?", o: ["The Andes", "The Rockies", "The Alps", "The Himalayas"], a: "The Himalayas" },
+                        { q: "What is the capital of Australia?", o: ["Sydney", "Melbourne", "Canberra", "Perth"], a: "Canberra" },
+                        { q: "Which country is known as the Land of the Rising Sun?", o: ["China", "Japan", "South Korea", "Thailand"], a: "Japan" },
+                        { q: "The Amazon rainforest is primarily located in which continent?", o: ["Asia", "Africa", "South America", "North America"], a: "South America" },
+                        { q: "What is the name of the river that flows through London?", o: ["River Severn", "River Thames", "River Tyne", "River Mersey"], a: "River Thames" },
+                        { q: "Which is the smallest continent by land area?", o: ["Europe", "Antarctica", "South America", "Australia"], a: "Australia" }
+                    ]
+                },
+                english: {
+                    title: "English",
+                    icon: "fas fa-language",
+                    color: "text-red-500",
+                    timeLimit: 300,
+                    questions: [
+                        { q: "What is the synonym for 'happy'?", o: ["Sad", "Angry", "Joyful", "Tired"], a: "Joyful" },
+                        { q: "What is the opposite of 'brave'?", o: ["Strong", "Cowardly", "Heroic", "Bold"], a: "Cowardly" },
+                        { q: "Which of these is a vowel?", o: ["B", "C", "D", "A"], a: "A" },
+                        { q: "Complete the sentence: An apple a day keeps the ___ away.", o: ["friend", "doctor", "teacher", "pet"], a: "doctor" },
+                        { q: "What is the past tense of 'go'?", o: ["Goed", "Gone", "Went", "Going"], a: "Went" },
+                        { q: "Identify the noun in: 'The cat sat on the mat.'", o: ["The", "Sat", "On", "Cat"], a: "Cat" },
+                        { q: "What do you call a person who writes books?", o: ["Author", "Reader", "Publisher", "Librarian"], a: "Author" },
+                        { q: "Choose the correct spelling:", o: ["Accomodate", "Acommodate", "Accommodate", "Acomodate"], a: "Accommodate" },
+                        { q: "What is a group of lions called?", o: ["A herd", "A pack", "A flock", "A pride"], a: "A pride" },
+                        { q: "What is the plural of 'mouse'?", o: ["Mouses", "Mice", "Mouse", "Mooses"], a: "Mice" }
+                    ]
+                },
+                physics: {
+                    title: "Physics",
+                    icon: "fas fa-atom",
+                    color: "text-purple-500",
+                    timeLimit: 300,
+                    questions: [
+                        { q: "What is the unit of force?", o: ["Watt", "Joule", "Newton", "Pascal"], a: "Newton" },
+                        { q: "Who proposed the theory of relativity?", o: ["Isaac Newton", "Galileo Galilei", "Nikola Tesla", "Albert Einstein"], a: "Albert Einstein" },
+                        { q: "Why is the sky blue on a clear day?", o: ["Reflection of oceans", "Scattering of light", "Absorption of light", "Presence of oxygen"], a: "Scattering of light" },
+                        { q: "What is the formula for calculating speed?", o: ["Distance × Time", "Distance / Time", "Time / Distance", "Distance + Time"], a: "Distance / Time" },
+                        { q: "Gravity is a force of ___.", o: ["Repulsion", "Attraction", "Friction", "Magnetism"], a: "Attraction" },
+                        { q: "What instrument is used to measure temperature?", o: ["Barometer", "Hygrometer", "Thermometer", "Altimeter"], a: "Thermometer" },
+                        { q: "Sound travels fastest through ___.", o: ["Gases", "Liquids", "Solids", "Vacuum"], a: "Solids" },
+                        { q: "What is the primary source of energy for the Earth?", o: ["Moon", "Stars", "The Sun", "Geothermal heat"], a: "The Sun" },
+                        { q: "Who is credited with the invention of the practical light bulb?", o: ["Nikola Tesla", "Alexander Graham Bell", "Thomas Edison", "Marie Curie"], a: "Thomas Edison" },
+                        { q: "What is the boiling point of water in Celsius?", o: ["90°C", "100°C", "110°C", "120°C"], a: "100°C" }
+                    ]
+                },
+                chemistry: {
+                    title: "Chemistry",
+                    icon: "fas fa-vial",
+                    color: "text-teal-500",
+                    timeLimit: 300,
+                    questions: [
+                        { q: "What is the chemical symbol for Gold?", o: ["Ag", "Go", "Au", "Gd"], a: "Au" },
+                        { q: "Which gas is most abundant in Earth's atmosphere?", o: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Argon"], a: "Nitrogen" },
+                        { q: "What is the main component of natural gas?", o: ["Ethane", "Propane", "Butane", "Methane"], a: "Methane" },
+                        { q: "The pH of a neutral solution is?", o: ["0", "7", "10", "14"], a: "7" },
+                        { q: "What is the chemical formula for table salt?", o: ["H2O", "CO2", "NaCl", "C6H12O6"], a: "NaCl" },
+                        { q: "Which acid is found in car batteries?", o: ["Nitric Acid", "Hydrochloric Acid", "Sulfuric Acid", "Acetic Acid"], a: "Sulfuric Acid" },
+                        { q: "What is dry ice?", o: ["Solid Water", "Solid Nitrogen", "Solid Carbon Dioxide", "Solid Hydrogen"], a: "Solid Carbon Dioxide" },
+                        { q: "Which metal is liquid at room temperature?", o: ["Gallium", "Bromine", "Mercury", "Francium"], a: "Mercury" },
+                        { q: "What are atoms composed of?", o: ["Cells, Tissues, Organs", "Protons, Neutrons, Electrons", "Molecules, Compounds", "Plasma, Gas, Liquid"], a: "Protons, Neutrons, Electrons" },
+                        { q: "The process of a liquid turning into a gas is called?", o: ["Condensation", "Freezing", "Melting", "Evaporation"], a: "Evaporation" }
+                    ]
+                },
+                biology: {
+                    title: "Biology",
+                    icon: "fas fa-dna",
+                    color: "text-lime-500",
+                    timeLimit: 300,
+                    questions: [
+                        { q: "What is the largest organ in the human body?", o: ["Liver", "Brain", "Heart", "Skin"], a: "Skin" },
+                        { q: "Photosynthesis occurs in which part of the plant?", o: ["Roots", "Stem", "Flowers", "Leaves"], a: "Leaves" },
+                        { q: "How many bones are in the adult human body?", o: ["206", "216", "196", "226"], a: "206" },
+                        { q: "Which blood type is the universal donor?", o: ["A+", "B+", "AB+", "O-"], a: "O-" },
+                        { q: "What is the main function of the heart?", o: ["To produce hormones", "To digest food", "To pump blood", "To filter waste"], a: "To pump blood" },
+                        { q: "DNA stands for?", o: ["Deoxyribonucleic Acid", "Diatomic Nucleic Acid", "Duonucleic Acid", "Denatured Nucleic Acid"], a: "Deoxyribonucleic Acid" },
+                        { q: "Which part of the brain is responsible for memory?", o: ["Cerebellum", "Hippocampus", "Medulla", "Thalamus"], a: "Hippocampus" },
+                        { q: "What is the green pigment in plants called?", o: ["Xanthophyll", "Carotene", "Chlorophyll", "Anthocyanin"], a: "Chlorophyll" },
+                        { q: "Which animal is the largest mammal on Earth?", o: ["African Elephant", "Giraffe", "Blue Whale", "Sperm Whale"], a: "Blue Whale" },
+                        { q: "Viruses are made of protein and ___.", o: ["Carbohydrates", "Lipids", "Genetic material (DNA/RNA)", "Cytoplasm"], a: "Genetic material (DNA/RNA)" }
+                    ]
+                },
+                computerscience: {
+                    title: "Computer Science",
+                    icon: "fas fa-laptop-code",
+                    color: "text-cyan-500",
+                    timeLimit: 300,
+                    questions: [
+                        { q: "What does 'CPU' stand for?", o: ["Computer Processing Unit", "Central Processing Unit", "Core Processing Unit", "Central Power Unit"], a: "Central Processing Unit" },
+                        { q: "Who is considered the father of the computer?", o: ["Alan Turing", "Charles Babbage", "John von Neumann", "Bill Gates"], a: "Charles Babbage" },
+                        { q: "What does 'URL' stand for?", o: ["Uniform Resource Locator", "Universal Resource Locator", "Uniform Resource Link", "Universal Resource Link"], a: "Uniform Resource Locator" },
+                        { q: "Who created the Python programming language?", o: ["James Gosling", "Bjarne Stroustrup", "Guido van Rossum", "Dennis Ritchie"], a: "Guido van Rossum" },
+                        { q: "What is the main memory of a computer called?", o: ["ROM", "HDD", "SSD", "RAM"], a: "RAM" },
+                        { q: "1 Gigabyte is equal to how many Megabytes?", o: ["1000", "1024", "2048", "512"], a: "1024" },
+                        { q: "What is the software that manages computer hardware?", o: ["Application Software", "Utility Software", "Operating System", "Firmware"], a: "Operating System" },
+                        { q: "What does 'HTML' stand for?", o: ["HyperText Markup Language", "HyperText Machine Language", "HighText Markup Language", "Hyperlink and Text Markup Language"], a: "HyperText Markup Language" },
+                        { q: "What is the 'brain' of the computer?", o: ["Motherboard", "RAM", "GPU", "CPU"], a: "CPU" },
+                        { q: "Which of the following is an input device?", o: ["Monitor", "Printer", "Speakers", "Mouse"], a: "Mouse" }
+                    ]
+                },
+                arts: {
+                    title: "Arts",
+                    icon: "fas fa-palette",
+                    color: "text-pink-500",
+                    timeLimit: 300,
+                    questions: [
+                        { q: "Who painted the Mona Lisa?", o: ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Michelangelo"], a: "Leonardo da Vinci" },
+                        { q: "Which artist is famous for 'The Starry Night'?", o: ["Claude Monet", "Salvador Dalí", "Vincent van Gogh", "Rembrandt"], a: "Vincent van Gogh" },
+                        { q: "Which of these is a primary color?", o: ["Green", "Orange", "Purple", "Red"], a: "Red" },
+                        { q: "Which country is famous for origami?", o: ["China", "Korea", "Japan", "Vietnam"], a: "Japan" },
+                        { q: "The 'Thinker' is a famous sculpture by which artist?", o: ["Donatello", "Auguste Rodin", "Bernini", "Canova"], a: "Auguste Rodin" },
+                        { q: "What is the main material in traditional sculpting?", o: ["Wood", "Metal", "Stone", "Clay"], a: "Clay" },
+                        { q: "Who is the author of the 'Harry Potter' series?", o: ["J.R.R. Tolkien", "George R.R. Martin", "J.K. Rowling", "C.S. Lewis"], a: "J.K. Rowling" },
+                        { q: "Which instrument has black and white keys?", o: ["Guitar", "Violin", "Trumpet", "Piano"], a: "Piano" },
+                        { q: "What is a self-portrait?", o: ["A painting of a landscape", "A portrait of the artist by the artist", "A sculpture of an animal", "A photo of someone else"], a: "A portrait of the artist by the artist" },
+                        { q: "Ballet is a form of ___.", o: ["Singing", "Acting", "Painting", "Dance"], a: "Dance" }
+                    ]
+                },
+                sports: {
+                    title: "Sports",
+                    icon: "fas fa-futbol",
+                    color: "text-orange-500",
+                    timeLimit: 300,
+                    questions: [
+                        { q: "How many players are on a standard soccer team on the field?", o: ["9", "10", "11", "12"], a: "11" },
+                        { q: "The Olympic Games are held every how many years?", o: ["2", "4", "6", "8"], a: "4" },
+                        { q: "Which sport is associated with Wimbledon?", o: ["Golf", "Cricket", "Tennis", "Rugby"], a: "Tennis" },
+                        { q: "In basketball, how many points is a free throw worth?", o: ["1", "2", "3", "4"], a: "1" },
+                        { q: "What is the national sport of India?", o: ["Cricket", "Kabaddi", "Hockey", "Football"], a: "Hockey" },
+                        { q: "Which country won the first-ever FIFA World Cup in 1930?", o: ["Brazil", "Argentina", "Italy", "Uruguay"], a: "Uruguay" },
+                        { q: "How many rings are in the Olympic symbol?", o: ["4", "5", "6", "7"], a: "5" },
+                        { q: "Which sport is played with a shuttlecock?", o: ["Table Tennis", "Squash", "Badminton", "Volleyball"], a: "Badminton" },
+                        { q: "Sachin Tendulkar is a legendary player of which sport?", o: ["Hockey", "Football", "Cricket", "Tennis"], a: "Cricket" },
+                        { q: "A marathon is a long-distance race of what length?", o: ["26.2 miles", "20 miles", "30 miles", "15.5 miles"], a: "26.2 miles" }
+                    ]
+                },
+                literature: {
+                    title: "Literature",
+                    icon: "fas fa-book-open",
+                    color: "text-amber-500",
+                    timeLimit: 300,
+                    questions: [
+                        { q: "Who wrote 'Romeo and Juliet'?", o: ["Charles Dickens", "William Shakespeare", "Jane Austen", "Mark Twain"], a: "William Shakespeare" },
+                        { q: "In 'The Lord of the Rings', who is the main protagonist?", o: ["Gandalf", "Aragorn", "Frodo Baggins", "Sauron"], a: "Frodo Baggins" },
+                        { q: "What is the name of the wizarding school in Harry Potter?", o: ["Beauxbatons", "Durmstrang", "Ilvermorny", "Hogwarts"], a: "Hogwarts" },
+                        { q: "'To be or not to be' is a famous line from which play?", o: ["Macbeth", "Othello", "King Lear", "Hamlet"], a: "Hamlet" },
+                        { q: "Who wrote 'Pride and Prejudice'?", o: ["Emily Brontë", "Charlotte Brontë", "Jane Austen", "George Eliot"], a: "Jane Austen" },
+                        { q: "Which book begins with 'Call me Ishmael'?", o: ["The Great Gatsby", "Moby Dick", "War and Peace", "To Kill a Mockingbird"], a: "Moby Dick" },
+                        { q: "Who is the author of 'The Adventures of Sherlock Holmes'?", o: ["Agatha Christie", "Arthur Conan Doyle", "Edgar Allan Poe", "G.K. Chesterton"], a: "Arthur Conan Doyle" },
+                        { q: "What type of literature is a haiku?", o: ["Novel", "Sonnet", "Epic", "Poetry"], a: "Poetry" },
+                        { q: "The 'Mahabharata' is an epic poem from which country?", o: ["China", "Japan", "India", "Greece"], a: "India" },
+                        { q: "Who wrote the famous novel '1984'?", o: ["Aldous Huxley", "Ray Bradbury", "George Orwell", "Philip K. Dick"], a: "George Orwell" }
+                    ]
+                },
+                currentaffairs: {
+                    title: "Current Affairs",
+                    icon: "fas fa-newspaper",
+                    color: "text-rose-500",
+                    timeLimit: 300,
+                    questions: [
+                        { q: "Who is the current Prime Minister of India?", o: ["Rahul Gandhi", "Amit Shah", "Narendra Modi", "Arvind Kejriwal"], a: "Narendra Modi" },
+                        { q: "Which country hosted the 2024 Summer Olympics?", o: ["USA", "Japan", "Australia", "France"], a: "France" },
+                        { q: "What is the name of the manned moon mission program by NASA?", o: ["Apollo", "Orion", "Artemis", "Gemini"], a: "Artemis" },
+                        { q: "Which social media company owns Instagram and WhatsApp?", o: ["Google", "Meta", "Twitter (X)", "ByteDance"], a: "Meta" },
+                        { q: "What is the currency of Japan?", o: ["Won", "Yuan", "Yen", "Ringgit"], a: "Yen" },
+                        { q: "The G20 Summit in 2023 was held in which country?", o: ["Brazil", "South Africa", "Indonesia", "India"], a: "India" },
+                        { q: "Who is the current CEO of Google's parent company, Alphabet?", o: ["Tim Cook", "Satya Nadella", "Sundar Pichai", "Mark Zuckerberg"], a: "Sundar Pichai" },
+                        { q: "Which country recently launched the Chandrayaan-3 lunar mission?", o: ["USA", "Russia", "China", "India"], a: "India" },
+                        { q: "What does the acronym NATO stand for?", o: ["North Asian Treaty Organization", "North Atlantic Treaty Organization", "New Atlantic Treaty Organization", "North Atlantic Trade Organization"], a: "North Atlantic Treaty Organization" },
+                        { q: "Who won the FIFA World Cup 2022?", o: ["France", "Brazil", "Argentina", "Germany"], a: "Argentina" }
+                    ]
+                },
+                generalknowledge: {
+                    title: "General Knowledge",
+                    icon: "fas fa-lightbulb",
+                    color: "text-fuchsia-500",
+                    timeLimit: 300,
+                    questions: [
+                        { q: "How many continents are there in the world?", o: ["5", "6", "7", "8"], a: "7" },
+                        { q: "Which is the largest planet in our solar system?", o: ["Earth", "Mars", "Jupiter", "Saturn"], a: "Jupiter" },
+                        { q: "What is the capital of Canada?", o: ["Toronto", "Vancouver", "Montreal", "Ottawa"], a: "Ottawa" },
+                        { q: "What is the hardest natural substance on Earth?", o: ["Gold", "Iron", "Diamond", "Quartz"], a: "Diamond" },
+                        { q: "What is the main language spoken in Brazil?", o: ["Spanish", "Portuguese", "English", "French"], a: "Portuguese" },
+                        { q: "How many days are in a leap year?", o: ["364", "365", "366", "367"], a: "366" },
+                        { q: "Who invented the telephone?", o: ["Thomas Edison", "Nikola Tesla", "Alexander Graham Bell", "Guglielmo Marconi"], a: "Alexander Graham Bell" },
+                        { q: "Which is the tallest mammal?", o: ["Elephant", "Giraffe", "Whale", "Rhinoceros"], a: "Giraffe" },
+                        { q: "What is the currency of the United Kingdom?", o: ["Euro", "Dollar", "Pound Sterling", "Franc"], a: "Pound Sterling" },
+                        { q: "Which ocean is the smallest in the world?", o: ["Atlantic", "Pacific", "Indian", "Arctic"], a: "Arctic" }
+                    ]
+                },
+                technology: {
+                    title: "Technology",
+                    icon: "fas fa-microchip",
+                    color: "text-sky-500",
+                    timeLimit: 300,
+                    questions: [
+                        { q: "What does 'AI' stand for?", o: ["Automated Intelligence", "Artificial Intelligence", "Algorithmic Intelligence", "Advanced Intelligence"], a: "Artificial Intelligence" },
+                        { q: "What is a 'cloud' in computing?", o: ["A local storage device", "A network of remote servers", "A type of software", "A computer's hard drive"], a: "A network of remote servers" },
+                        { q: "What technology allows devices to connect to the internet wirelessly?", o: ["Bluetooth", "NFC", "Ethernet", "Wi-Fi"], a: "Wi-Fi" },
+                        { q: "Blockchain technology is primarily known for?", o: ["Social Media", "Video Streaming", "Cryptocurrency", "E-commerce"], a: "Cryptocurrency" },
+                        { q: "What does 'USB' stand for?", o: ["Universal Serial Bus", "Universal System Bus", "Unified Serial Bus", "Unified System Bus"], a: "Universal Serial Bus" },
+                        { q: "What was the first widely used web browser?", o: ["Internet Explorer", "Netscape Navigator", "Mosaic", "Opera"], a: "Mosaic" },
+                        { q: "Which company makes the iPhone?", o: ["Samsung", "Google", "Apple", "Microsoft"], a: "Apple" },
+                        { q: "What is an algorithm?", o: ["A computer chip", "A programming language", "A set of rules for solving a problem", "A type of computer virus"], a: "A set of rules for solving a problem" },
+                        { q: "What does 'GPS' stand for?", o: ["Global Positioning System", "General Positioning Service", "Global Pathfinding System", "General Pathfinding Service"], a: "Global Positioning System" },
+                        { q: "What is a 'firewall' in computer security?", o: ["An anti-virus software", "A network security system", "A physical barrier", "A data encryption method"], a: "A network security system" }
+                    ]
+                }
+            };
+
+            // --- STATE VARIABLES ---
+            let isLoggedIn = false;
+            let currentQuizKey = null;
+            let currentQuestionIndex = 0;
+            let userAnswers = {};
+            let timer;
+            let timeLeft = 0;
+            
+            // --- DOM ELEMENTS ---
+            const sections = document.querySelectorAll('.section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const subjectCardsContainer = document.getElementById('subject-cards-container');
+            const loginForm = document.getElementById('login-form');
+            const loginLink = document.getElementById('login-link');
+            const logoutLink = document.getElementById('logout-link');
+            const authLinks = document.querySelectorAll('.auth-link');
+
+            // Quiz elements
+            const quizTitle = document.getElementById('quiz-title');
+            const questionCounter = document.getElementById('question-counter');
+            const progressBar = document.getElementById('progress-bar');
+            const timerDisplay = document.getElementById('timer-display');
+            const questionText = document.getElementById('question-text');
+            const optionsContainer = document.getElementById('options-container');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const finishBtn = document.getElementById('finish-btn');
+            
+            // Results elements
+            const resultsContainer = document.getElementById('results-container');
+            const resultsSubject = document.getElementById('results-subject');
+            const resultsScore = document.getElementById('results-score');
+            const resultsCorrect = document.getElementById('results-correct');
+            const resultsTime = document.getElementById('results-time');
+            const reviewContainer = document.getElementById('review-answers-container');
+
+
+            // --- NAVIGATION & AUTH ---
+            function showSection(id) {
+                if (!isLoggedIn && id !== 'login') {
+                    showSection('login');
+                    return;
+                }
+                 if (isLoggedIn && id === 'login') {
+                    showSection('home');
+                    return;
+                }
+                sections.forEach(section => {
+                    section.classList.toggle('active', section.id === id);
+                });
+            }
+
+            function handleNav(hash) {
+                const id = hash.substring(1) || (isLoggedIn ? 'home' : 'login');
+                const targetSection = document.getElementById(id);
+
+                if(targetSection && targetSection.classList.contains('section')) {
+                     showSection(id);
+                } else if(quizData[id]) { // Check if it's a quiz subject
+                    startQuiz(id);
+                } else {
+                    showSection(isLoggedIn ? 'home' : 'login');
+                }
+            }
+
+            function updateAuthUI() {
+                if (isLoggedIn) {
+                    loginLink.style.display = 'none';
+                    logoutLink.style.display = 'block';
+                    authLinks.forEach(link => link.style.display = 'block');
+                } else {
+                    loginLink.style.display = 'block';
+                    logoutLink.style.display = 'none';
+                    authLinks.forEach(link => link.style.display = 'none');
+                }
+            }
+
+            function login() {
+                isLoggedIn = true;
+                updateAuthUI();
+                window.location.hash = '#home';
+            }
+
+            function logout() {
+                isLoggedIn = false;
+                updateAuthUI();
+                window.location.hash = '#login';
+            }
+
+            // --- INITIALIZATION ---
+            function initialize() {
+                renderSubjectCards();
+                
+                // Set up event listeners
+                loginForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    login();
+                });
+                logoutLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    logout();
+                });
+
+                window.addEventListener('hashchange', () => handleNav(window.location.hash));
+                
+                // Initial setup
+                updateAuthUI();
+                handleNav(window.location.hash); 
+
+                document.querySelectorAll('a[href^="#"]').forEach(link => {
+                    if(link.id !== 'logout-link') {
+                        link.addEventListener('click', function (e) {
+                            e.preventDefault();
+                            window.location.hash = this.getAttribute('href');
+                        });
+                    }
+                });
+
+                prevBtn.addEventListener('click', prevQuestion);
+                nextBtn.addEventListener('click', nextQuestion);
+                finishBtn.addEventListener('click', finishQuiz);
+            }
+
+            // --- DYNAMIC RENDERING ---
+            function renderSubjectCards() {
+                subjectCardsContainer.innerHTML = '';
+                Object.keys(quizData).forEach(key => {
+                    const quiz = quizData[key];
+                    const card = document.createElement('div');
+                    card.className = 'bg-white p-6 rounded-lg shadow-lg text-center transform hover:-translate-y-2 transition-transform';
+                    card.innerHTML = `
+                        <i class="${quiz.icon} ${quiz.color} fa-3x mb-4"></i>
+                        <h5 class="text-xl font-semibold mb-2">${quiz.title}</h5>
+                        <p class="text-gray-500 mb-4">${quiz.questions.length} Questions</p>
+                        <a href="#${key}" class="btn-primary text-white font-bold py-2 px-4 rounded-lg">Start Quiz</a>
+                    `;
+                    subjectCardsContainer.appendChild(card);
+                });
+            }
+
+            // --- QUIZ LOGIC ---
+            function startQuiz(key) {
+                if(!isLoggedIn) {
+                    window.location.hash = '#login';
+                    return;
+                }
+                currentQuizKey = key;
+                currentQuestionIndex = 0;
+                userAnswers = {};
+                const quiz = quizData[key];
+                
+                quizTitle.textContent = quiz.title;
+                timeLeft = quiz.timeLimit;
+                startTimer();
+                
+                renderQuestion();
+                showSection('quiz');
+            }
+
+            function renderQuestion() {
+                const quiz = quizData[currentQuizKey];
+                const question = quiz.questions[currentQuestionIndex];
+                
+                // Update header
+                questionCounter.textContent = `Question ${currentQuestionIndex + 1}/${quiz.questions.length}`;
+                progressBar.style.width = `${((currentQuestionIndex + 1) / quiz.questions.length) * 100}%`;
+
+                // Update question and options
+                questionText.textContent = question.q;
+                optionsContainer.innerHTML = '';
+                question.o.forEach((option, index) => {
+                    const optionId = `q${currentQuestionIndex}-o${index}`;
+                    const label = document.createElement('label');
+                    label.className = 'option-label';
+                    label.htmlFor = optionId;
+                    
+                    if(userAnswers[currentQuestionIndex] === option) {
+                       label.classList.add('selected');
+                    }
+
+                    label.innerHTML = `
+                        <input type="radio" name="option" id="${optionId}" value="${option}">
+                        <span class="option-text">${String.fromCharCode(65 + index)}. ${option}</span>
+                    `;
+                    label.addEventListener('click', () => selectAnswer(option, label));
+                    optionsContainer.appendChild(label);
+                });
+                
+                updateNavButtons();
+            }
+
+            function selectAnswer(option, label) {
+                userAnswers[currentQuestionIndex] = option;
+                // Visually update selection
+                document.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+                label.classList.add('selected');
+            }
+
+            function updateNavButtons() {
+                prevBtn.disabled = currentQuestionIndex === 0;
+                const isLastQuestion = currentQuestionIndex === quizData[currentQuizKey].questions.length - 1;
+                nextBtn.style.display = isLastQuestion ? 'none' : 'block';
+                finishBtn.style.display = isLastQuestion ? 'block' : 'none';
+            }
+
+            function prevQuestion() {
+                if (currentQuestionIndex > 0) {
+                    currentQuestionIndex--;
+                    renderQuestion();
+                }
+            }
+
+            function nextQuestion() {
+                if (currentQuestionIndex < quizData[currentQuizKey].questions.length - 1) {
+                    currentQuestionIndex++;
+                    renderQuestion();
+                }
+            }
+            
+            function startTimer() {
+                clearInterval(timer);
+                timer = setInterval(() => {
+                    timeLeft--;
+                    const minutes = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+                    const seconds = (timeLeft % 60).toString().padStart(2, '0');
+                    timerDisplay.textContent = `${minutes}:${seconds}`;
+                    if (timeLeft <= 0) {
+                        clearInterval(timer);
+                        finishQuiz();
+                    }
+                }, 1000);
+            }
+
+            function finishQuiz() {
+                clearInterval(timer);
+                calculateResults();
+                showSection('scores');
+            }
+
+            // --- RESULTS LOGIC ---
+            function calculateResults() {
+                const quiz = quizData[currentQuizKey];
+                let correctCount = 0;
+                
+                quiz.questions.forEach((question, index) => {
+                    if (userAnswers[index] === question.a) {
+                        correctCount++;
+                    }
+                });
+                
+                const score = Math.round((correctCount / quiz.questions.length) * 100);
+                const timeTaken = quiz.timeLimit - timeLeft;
+
+                // Display results
+                resultsSubject.textContent = `${quiz.title} Quiz Results`;
+                resultsScore.textContent = `${score}%`;
+                resultsCorrect.textContent = `${correctCount}/${quiz.questions.length}`;
+                resultsTime.textContent = `${Math.floor(timeTaken / 60)}m ${timeTaken % 60}s`;
+
+                // Render review
+                renderReview();
+            }
+
+            function renderReview() {
+                const quiz = quizData[currentQuizKey];
+                reviewContainer.innerHTML = '<h4 class="text-2xl font-bold text-gray-800 mb-4 text-center">Review Your Answers</h4>';
+                quiz.questions.forEach((question, index) => {
+                    const userAnswer = userAnswers[index];
+                    const correctAnswer = question.a;
+                    
+                    const questionBlock = document.createElement('div');
+                    questionBlock.className = 'mb-6 p-4 border rounded-lg';
+                    
+                    let optionsHtml = '';
+                    question.o.forEach(option => {
+                        let optionClass = 'option-label';
+                        if (option === correctAnswer) {
+                            optionClass += ' correct';
+                        } else if (option === userAnswer && userAnswer !== correctAnswer) {
+                            optionClass += ' incorrect';
+                        }
+                        optionsHtml += `<div class="${optionClass}">${option}</div>`;
+                    });
+                    
+                    questionBlock.innerHTML = `
+                        <p class="font-semibold text-lg mb-2">${index + 1}. ${question.q}</p>
+                        <div class="space-y-2">${optionsHtml}</div>
+                        ${userAnswer === undefined ? '<p class="text-sm text-red-600 mt-2">You did not answer this question.</p>' : ''}
+                    `;
+                    reviewContainer.appendChild(questionBlock);
+                });
+            }
+
+
+            // --- START THE APP ---
+            initialize();
+        });
+    </script>
+</body>
+</html>
+
+

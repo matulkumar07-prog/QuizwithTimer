@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizMaster - Interactive Quiz Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#home">
+                <i class="fas fa-brain me-2"></i>QuizMaster
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home">
+                            <i class="fas fa-home me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#subjects" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-book me-1"></i>Subjects
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#mathematics">Mathematics</a></li>
+                            <li><a class="dropdown-item" href="#science">Science</a></li>
+                            <li><a class="dropdown-item" href="#history">History</a></li>
+                            <li><a class="dropdown-item" href="#geography">Geography</a></li>
+                            <li><a class="dropdown-item" href="#english">English</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#physics">Physics</a></li>
+                            <li><a class="dropdown-item" href="#chemistry">Chemistry</a></li>
+                            <li><a class="dropdown-item" href="#biology">Biology</a></li>
+                            <li><a class="dropdown-item" href="#computer">Computer Science</a></li>
+                            <li><a class="dropdown-item" href="#arts">Arts</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#sports">Sports</a></li>
+                            <li><a class="dropdown-item" href="#literature">Literature</a></li>
+                            <li><a class="dropdown-item" href="#current">Current Affairs</a></li>
+                            <li><a class="dropdown-item" href="#general">General Knowledge</a></li>
+                            <li><a class="dropdown-item" href="#technology">Technology</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#scores">
+                            <i class="fas fa-trophy me-1"></i>Scores
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#login">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin.html">
+                            <i class="fas fa-shield-alt me-1"></i>Admin
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5 pt-4">
+        <!-- Home Section -->
+        <section id="home" class="section">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 mb-4">Welcome to QuizMaster</h1>
+                    <p class="lead mb-5">Test your knowledge across 15 different subjects with our interactive quiz platform. Track your progress and compete with others!</p>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="card feature-card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-clock fa-3x text-primary mb-3"></i>
+                                    <h5>Timed Quizzes</h5>
+                                    <p>Challenge yourself with time-limited questions</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card feature-card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-chart-line fa-3x text-success mb-3"></i>
+                                    <h5>Score Tracking</h5>
+                                    <p>Monitor your progress and improvement</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card feature-card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-graduation-cap fa-3x text-warning mb-3"></i>
+                                    <h5>15 Subjects</h5>
+                                    <p>Wide range of topics to test your knowledge</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-5">
+                        <a href="#login" class="btn btn-primary btn-lg me-3">Get Started</a>
+                        <a href="#scores" class="btn btn-outline-primary btn-lg">View Scores</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Login Section -->
+        <section id="login" class="section">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="text-center"><i class="fas fa-user-circle me-2"></i>Login</h3>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="username" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="password" required>
+                                </div>
+                                <a href="#subjects" class="btn btn-primary w-100">Login</a>
+                            </form>
+                            <div class="text-center mt-3">
+                                <small class="text-muted">Demo: Click login to access quizzes</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Subjects Overview -->
+        <section id="subjects" class="section">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="mb-4 text-center"><i class="fas fa-book me-2"></i>Choose Your Subject</h2>
+                    <div class="row g-4">
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <div class="card subject-card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-calculator fa-3x text-primary mb-3"></i>
+                                    <h5>Mathematics</h5>
+                                    <p class="text-muted">Numbers, equations, and problem solving</p>
+                                    <a href="#mathematics" class="btn btn-primary">Start Quiz</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <div class="card subject-card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-flask fa-3x text-success mb-3"></i>
+                                    <h5>Science</h5>
+                                    <p class="text-muted">General science and natural phenomena</p>
+                                    <a href="#science" class="btn btn-success">Start Quiz</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <div class="card subject-card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-landmark fa-3x text-warning mb-3"></i>
+                                    <h5>History</h5>
+                                    <p class="text-muted">Past events and civilizations</p>
+                                    <a href="#history" class="btn btn-warning">Start Quiz</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <div class="card subject-card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-globe fa-3x text-info mb-3"></i>
+                                    <h5>Geography</h5>
+                                    <p class="text-muted">Countries, capitals, and landscapes</p>
+                                    <a href="#geography" class="btn btn-info">Start Quiz</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <div class="card subject-card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-language fa-3x text-danger mb-3"></i>
+                                    <h5>English</h5>
+                                    <p class="text-muted">Grammar, vocabulary, and literature</p>
+                                    <a href="#english" class="btn btn-danger">Start Quiz</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <div class="card subject-card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-atom fa-3x text-primary mb-3"></i>
+                                    <h5>Physics</h5>
+                                    <p class="text-muted">Forces, energy, and matter</p>
+                                    <a href="#physics" class="btn btn-primary">Start Quiz</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <div class="card subject-card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-vial fa-3x text-success mb-3"></i>
+                                    <h5>Chemistry</h5>
+                                    <p class="text-muted">Elements, compounds, and reactions</p>
+                                    <a href="#chemistry" class="btn btn-success">Start Quiz</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <div class="card subject-card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-dna fa-3x text-warning mb-3"></i>
+                                    <h5>Biology</h5>
+                                    <p class="text-muted">Life sciences and organisms</p>
+                                    <a href="#biology" class="btn btn-warning">Start Quiz</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <div class="card subject-card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-laptop-code fa-3x text-info mb-3"></i>
+                                    <h5>Computer Science</h5>
+                                    <p class="text-muted">Programming and technology</p>
+                                    <a href="#computer" class="btn btn-info">Start Quiz</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <div class="card subject-card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-palette fa-3x text-danger mb-3"></i>
+                                    <h5>Arts</h5>
+                                    <p class="text-muted">Visual arts and creativity</p>
+                                    <a href="#arts" class="btn btn-danger">Start Quiz</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <div class="card subject-card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-football-ball fa-3x text-primary mb-3"></i>
+                                    <h5>Sports</h5>
+                                    <p class="text-muted">Games, athletics, and competitions</p>
+                                    <a href="#sports" class="btn btn-primary">Start Quiz</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <div class="card subject-card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-book-open fa-3x text-success mb-3"></i>
+                                    <h5>Literature</h5>
+                                    <p class="text-muted">Books, authors, and poetry</p>
+                                    <a href="#literature" class="btn btn-success">Start Quiz</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <div class="card subject-card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-newspaper fa-3x text-warning mb-3"></i>
+                                    <h5>Current Affairs</h5>
+                                    <p class="text-muted">Recent events and news</p>
+                                    <a href="#current" class="btn btn-warning">Start Quiz</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <div class="card subject-card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-lightbulb fa-3x text-info mb-3"></i>
+                                    <h5>General Knowledge</h5>
+                                    <p class="text-muted">Mixed topics and trivia</p>
+                                    <a href="#general" class="btn btn-info">Start Quiz</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <div class="card subject-card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-microchip fa-3x text-danger mb-3"></i>
+                                    <h5>Technology</h5>
+                                    <p class="text-muted">Modern tech and innovations</p>
+                                    <a href="#technology" class="btn btn-danger">Start Quiz</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mathematics Quiz -->
+        <section id="mathematics" class="section quiz-section">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-4">
+                                    <div class="timer-display">
+                                        <i class="fas fa-clock me-2"></i>
+                                        <span class="timer">05:00</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    <h5 class="mb-0">Mathematics Quiz</h5>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <span class="question-counter">Question 1 of 5</span>
+                                </div>
+                            </div>
+                            <div class="progress mt-3">
+                                <div class="progress-bar" style="width: 20%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-container">
+                        <!-- Question 1 -->
+                        <div class="quiz-slide active">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="mb-4">What is 25 × 4?</h4>
+                                    <div class="options">
+                                        <label class="option-label">
+                                            <input type="radio" name="math-q1" value="a">
+                                            <span class="option-text">A. 90</span>
+                                        </label>
+                                        <label class="option-label">
+                                            <input type="radio" name="math-q1" value="b">
+                                            <span class="option-text">B. 95</span>
+                                        </label>
+                                        <label class="option-label">
+                                            <input type="radio" name="math-q1" value="c">
+                                            <span class="option-text">C. 100</span>
+                                        </label>
+                                        <label class="option-label">
+                                            <input type="radio" name="math-q1" value="d">
+                                            <span class="option-text">D. 105</span>
+                                        </label>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-4">
+                                        <button class="btn btn-secondary" disabled>Previous</button>
+                                        <a href="#math-q2" class="btn btn-primary">Next</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Question 2 -->
+                        <div class="quiz-slide" id="math-q2">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="mb-4">What is the square root of 144?</h4>
+                                    <div class="options">
+                                        <label class="option-label">
+                                            <input type="radio" name="math-q2" value="a">
+                                            <span class="option-text">A. 11</span>
+                                        </label>
+                                        <label class="option-label">
+                                            <input type="radio" name="math-q2" value="b">
+                                            <span class="option-text">B. 12</span>
+                                        </label>
+                                        <label class="option-label">
+                                            <input type="radio" name="math-q2" value="c">
+                                            <span class="option-text">C. 13</span>
+                                        </label>
+                                        <label class="option-label">
+                                            <input type="radio" name="math-q2" value="d">
+                                            <span class="option-text">D. 14</span>
+                                        </label>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-4">
+                                        <a href="#mathematics" class="btn btn-secondary">Previous</a>
+                                        <a href="#math-q3" class="btn btn-primary">Next</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Question 3 -->
+                        <div class="quiz-slide" id="math-q3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="mb-4">What is 15% of 200?</h4>
+                                    <div class="options">
+                                        <label class="option-label">
+                                            <input type="radio" name="math-q3" value="a">
+                                            <span class="option-text">A. 25</span>
+                                        </label>
+                                        <label class="option-label">
+                                            <input type="radio" name="math-q3" value="b">
+                                            <span class="option-text">B. 30</span>
+                                        </label>
+                                        <label class="option-label">
+                                            <input type="radio" name="math-q3" value="c">
+                                            <span class="option-text">C. 35</span>
+                                        </label>
+                                        <label class="option-label">
+                                            <input type="radio" name="math-q3" value="d">
+                                            <span class="option-text">D. 40</span>
+                                        </label>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-4">
+                                        <a href="#math-q2" class="btn btn-secondary">Previous</a>
+                                        <a href="#math-q4" class="btn btn-primary">Next</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Question 4 -->
+                        <div class="quiz-slide" id="math-q4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="mb-4">What is the value of π (pi) approximately?</h4>
+                                    <div class="options">
+                                        <label class="option-label">
+                                            <input type="radio" name="math-q4" value="a">
+                                            <span class="option-text">A. 3.12</span>
+                                        </label>
+                                        <label class="option-label">
+                                            <input type="radio" name="math-q4" value="b">
+                                            <span class="option-text">B. 3.14</span>
+                                        </label>
+                                        <label class="option-label">
+                                            <input type="radio" name="math-q4" value="c">
+                                            <span class="option-text">C. 3.16</span>
+                                        </label>
+                                        <label class="option-label">
+                                            <input type="radio" name="math-q4" value="d">
+                                            <span class="option-text">D. 3.18</span>
+                                        </label>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-4">
+                                        <a href="#math-q3" class="btn btn-secondary">Previous</a>
+                                        <a href="#math-q5" class="btn btn-primary">Next</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Question 5 -->
+                        <div class="quiz-slide" id="math-q5">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="mb-4">What is 7³?</h4>
+                                    <div class="options">
+                                        <label class="option-label">
+                                            <input type="radio" name="math-q5" value="a">
+                                            <span class="option-text">A. 343</span>
+                                        </label>
+                                        <label class="option-label">
+                                            <input type="radio" name="math-q5" value="b">
+                                            <span class="option-text">B. 294</span>
+                                        </label>
+                                        <label class="option-label">
+                                            <input type="radio" name="math-q5" value="c">
+                                            <span class="option-text">C. 421</span>
+                                        </label>
+                                        <label class="option-label">
+                                            <input type="radio" name="math-q5" value="d">
+                                            <span class="option-text">D. 392</span>
+                                        </label>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-4">
+                                        <a href="#math-q4" class="btn btn-secondary">Previous</a>
+                                        <a href="#math-results" class="btn btn-success">Finish Quiz</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Results -->
+                        <div class="quiz-slide" id="math-results">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-trophy fa-4x text-warning mb-4"></i>
+                                    <h3>Quiz Completed!</h3>
+                                    <p class="lead">Mathematics Quiz Results</p>
+                                    <div class="result-stats">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="stat-card">
+                                                    <h4>Score</h4>
+                                                    <p class="display-6">80%</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="stat-card">
+                                                    <h4>Correct</h4>
+                                                    <p class="display-6">4/5</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="stat-card">
+                                                    <h4>Time</h4>
+                                                    <p class="display-6">3:45</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4">
+                                        <a href="#subjects" class="btn btn-primary me-3">Try Another Quiz</a>
+                                        <a href="#scores" class="btn btn-outline-primary">View All Scores</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Science Quiz -->
+        <section id="science" class="section quiz-section">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-4">
+                                    <div class="timer-display">
+                                        <i class="fas fa-clock me-2"></i>
+                                        <span class="timer">05:00</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    <h5 class="mb-0">Science Quiz</h5>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <span class="question-counter">Question 1 of 5</span>
+                                </div>
+                            </div>
+                            <div class="progress mt-3">
+                                <div class="progress-bar bg-success" style="width: 20%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-container">
+                        <!-- Question 1 -->
+                        <div class="quiz-slide active">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="mb-4">What is the chemical symbol for water?</h4>
+                                    <div class="options">
+                                        <label class="option-label">
+                                            <input type="radio" name="science-q1" value="a">
+                                            <span class="option-text">A. H2O</span>
+                                        </label>
+                                        <label class="option-label">
+                                            <input type="radio" name="science-q1" value="b">
+                                            <span class="option-text">B. CO2</span>
+                                        </label>
+                                        <label class="option-label">
+                                            <input type="radio" name="science-q1" value="c">
+                                            <span class="option-text">C. NaCl</span>
+                                        </label>
+                                        <label class="option-label">
+                                            <input type="radio" name="science-q1" value="d">
+                                            <span class="option-text">D. CH4</span>
+                                        </label>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-4">
+                                        <button class="btn btn-secondary" disabled>Previous</button>
+                                        <a href="#science-q2" class="btn btn-success">Next</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Additional questions would follow the same pattern -->
+                        <div class="quiz-slide" id="science-q2">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="mb-4">What planet is closest to the Sun?</h4>
+                                    <div class="options">
+                                        <label class="option-label">
+                                            <input type="radio" name="science-q2" value="a">
+                                            <span class="option-text">A. Venus</span>
+                                        </label>
+                                        <label class="option-label">
+                                            <input type="radio" name="science-q2" value="b">
+                                            <span class="option-text">B. Earth</span>
+                                        </label>
+                                        <label class="option-label">
+                                            <input type="radio" name="science-q2" value="c">
+                                            <span class="option-text">C. Mercury</span>
+                                        </label>
+                                        <label class="option-label">
+                                            <input type="radio" name="science-q2" value="d">
+                                            <span class="option-text">D. Mars</span>
+                                        </label>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-4">
+                                        <a href="#science" class="btn btn-secondary">Previous</a>
+                                        <a href="#science-results" class="btn btn-success">Finish Quiz</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Results -->
+                        <div class="quiz-slide" id="science-results">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-medal fa-4x text-success mb-4"></i>
+                                    <h3>Quiz Completed!</h3>
+                                    <p class="lead">Science Quiz Results</p>
+                                    <div class="result-stats">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="stat-card">
+                                                    <h4>Score</h4>
+                                                    <p class="display-6">100%</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="stat-card">
+                                                    <h4>Correct</h4>
+                                                    <p class="display-6">2/2</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="stat-card">
+                                                    <h4>Time</h4>
+                                                    <p class="display-6">2:15</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4">
+                                        <a href="#subjects" class="btn btn-success me-3">Try Another Quiz</a>
+                                        <a href="#scores" class="btn btn-outline-success">View All Scores</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Placeholder sections for other subjects -->
+        <section id="history" class="section quiz-section">
+            <div class="text-center">
+                <h2><i class="fas fa-landmark me-2"></i>History Quiz</h2>
+                <p class="lead">Coming Soon - Historical events and civilizations</p>
+                <a href="#subjects" class="btn btn-warning">Back to Subjects</a>
+            </div>
+        </section>
+
+        <section id="geography" class="section quiz-section">
+            <div class="text-center">
+                <h2><i class="fas fa-globe me-2"></i>Geography Quiz</h2>
+                <p class="lead">Coming Soon - Countries, capitals, and landscapes</p>
+                <a href="#subjects" class="btn btn-info">Back to Subjects</a>
+            </div>
+        </section>
+
+        <section id="english" class="section quiz-section">
+            <div class="text-center">
+                <h2><i class="fas fa-language me-2"></i>English Quiz</h2>
+                <p class="lead">Coming Soon - Grammar, vocabulary, and literature</p>
+                <a href="#subjects" class="btn btn-danger">Back to Subjects</a>
+            </div>
+        </section>
+
+        <section id="physics" class="section quiz-section">
+            <div class="text-center">
+                <h2><i class="fas fa-atom me-2"></i>Physics Quiz</h2>
+                <p class="lead">Coming Soon - Forces, energy, and matter</p>
+                <a href="#subjects" class="btn btn-primary">Back to Subjects</a>
+            </div>
+        </section>
+
+        <section id="chemistry" class="section quiz-section">
+            <div class="text-center">
+                <h2><i class="fas fa-vial me-2"></i>Chemistry Quiz</h2>
+                <p class="lead">Coming Soon - Elements, compounds, and reactions</p>
+                <a href="#subjects" class="btn btn-success">Back to Subjects</a>
+            </div>
+        </section>
+
+        <section id="biology" class="section quiz-section">
+            <div class="text-center">
+                <h2><i class="fas fa-dna me-2"></i>Biology Quiz</h2>
+                <p class="lead">Coming Soon - Life sciences and organisms</p>
+                <a href="#subjects" class="btn btn-warning">Back to Subjects</a>
+            </div>
+        </section>
+
+        <section id="computer" class="section quiz-section">
+            <div class="text-center">
+                <h2><i class="fas fa-laptop-code me-2"></i>Computer Science Quiz</h2>
+                <p class="lead">Coming Soon - Programming and technology</p>
+                <a href="#subjects" class="btn btn-info">Back to Subjects</a>
+            </div>
+        </section>
+
+        <section id="arts" class="section quiz-section">
+            <div class="text-center">
+                <h2><i class="fas fa-palette me-2"></i>Arts Quiz</h2>
+                <p class="lead">Coming Soon - Visual arts and creativity</p>
+                <a href="#subjects" class="btn btn-danger">Back to Subjects</a>
+            </div>
+        </section>
+
+        <section id="sports" class="section quiz-section">
+            <div class="text-center">
+                <h2><i class="fas fa-football-ball me-2"></i>Sports Quiz</h2>
+                <p class="lead">Coming Soon - Games, athletics, and competitions</p>
+                <a href="#subjects" class="btn btn-primary">Back to Subjects</a>
+            </div>
+        </section>
+
+        <section id="literature" class="section quiz-section">
+            <div class="text-center">
+                <h2><i class="fas fa-book-open me-2"></i>Literature Quiz</h2>
+                <p class="lead">Coming Soon - Books, authors, and poetry</p>
+                <a href="#subjects" class="btn btn-success">Back to Subjects</a>
+            </div>
+        </section>
+
+        <section id="current" class="section quiz-section">
+            <div class="text-center">
+                <h2><i class="fas fa-newspaper me-2"></i>Current Affairs Quiz</h2>
+                <p class="lead">Coming Soon - Recent events and news</p>
+                <a href="#subjects" class="btn btn-warning">Back to Subjects</a>
+            </div>
+        </section>
+
+        <section id="general" class="section quiz-section">
+            <div class="text-center">
+                <h2><i class="fas fa-lightbulb me-2"></i>General Knowledge Quiz</h2>
+                <p class="lead">Coming Soon - Mixed topics and trivia</p>
+                <a href="#subjects" class="btn btn-info">Back to Subjects</a>
+            </div>
+        </section>
+
+        <section id="technology" class="section quiz-section">
+            <div class="text-center">
+                <h2><i class="fas fa-microchip me-2"></i>Technology Quiz</h2>
+                <p class="lead">Coming Soon - Modern tech and innovations</p>
+                <a href="#subjects" class="btn btn-danger">Back to Subjects</a>
+            </div>
+        </section>
+
+        <!-- Scores Section -->
+        <section id="scores" class="section">
+            <h2 class="mb-4"><i class="fas fa-trophy me-2"></i>Score Tracking</h2>
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Your Quiz Results</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="score-item d-flex justify-content-between align-items-center p-3 border-bottom">
+                                <div>
+                                    <h6 class="mb-1">Mathematics Quiz</h6>
+                                    <small class="text-muted">Today</small>
+                                </div>
+                                <span class="badge bg-warning fs-6">80%</span>
+                            </div>
+                            <div class="score-item d-flex justify-content-between align-items-center p-3 border-bottom">
+                                <div>
+                                    <h6 class="mb-1">Science Quiz</h6>
+                                    <small class="text-muted">Today</small>
+                                </div>
+                                <span class="badge bg-success fs-6">100%</span>
+                            </div>
+                            <div class="score-item d-flex justify-content-between align-items-center p-3">
+                                <div>
+                                    <h6 class="mb-1">History Quiz</h6>
+                                    <small class="text-muted">Yesterday</small>
+                                </div>
+                                <span class="badge bg-info fs-6">75%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Statistics</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="stat-item d-flex justify-content-between align-items-center p-2 border-bottom">
+                                <span class="stat-label">Total Quizzes:</span>
+                                <span class="stat-value">3</span>
+                            </div>
+                            <div class="stat-item d-flex justify-content-between align-items-center p-2 border-bottom">
+                                <span class="stat-label">Average Score:</span>
+                                <span class="stat-value">85%</span>
+                            </div>
+                            <div class="stat-item d-flex justify-content-between align-items-center p-2">
+                                <span class="stat-label">Best Score:</span>
+                                <span class="stat-value">100%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

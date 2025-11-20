@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizMaster Admin Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="admin-style.css">
+</head>
+<body>
+    <!-- Admin Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#admin-dashboard">
+                <i class="fas fa-shield-alt me-2"></i>QuizMaster Admin
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="adminNavbar">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <span class="nav-link">Welcome, <strong id="adminUserDisplay">Admin</strong></span>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-outline-light btn-sm ms-2" onclick="logoutAdmin()">
+                            <i class="fas fa-sign-out-alt me-1"></i>Logout
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar & Main Content -->
+    <div class="admin-container mt-5">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <nav class="nav flex-column">
+                <a class="nav-link active" href="#" onclick="showAdminSection('dashboard')">
+                    <i class="fas fa-chart-line me-2"></i>Dashboard
+                </a>
+                <a class="nav-link" href="#" onclick="showAdminSection('quizzes')">
+                    <i class="fas fa-book me-2"></i>Manage Quizzes
+                </a>
+                <a class="nav-link" href="#" onclick="showAdminSection('questions')">
+                    <i class="fas fa-question-circle me-2"></i>Manage Questions
+                </a>
+                <a class="nav-link" href="#" onclick="showAdminSection('users')">
+                    <i class="fas fa-users me-2"></i>Users
+                </a>
+                <a class="nav-link" href="#" onclick="showAdminSection('analytics')">
+                    <i class="fas fa-chart-bar me-2"></i>Analytics
+                </a>
+                <a class="nav-link" href="#" onclick="showAdminSection('settings')">
+                    <i class="fas fa-cog me-2"></i>Settings
+                </a>
+                <hr>
+                <a class="nav-link" href="index.html">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Quiz
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-content">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="admin-section active">
+                <div class="section-header">
+                    <h2><i class="fas fa-chart-line me-2"></i>Dashboard</h2>
+                </div>
+                
+                <div class="row g-4 mb-4">
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="stat-icon primary">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h6>Total Quizzes</h6>
+                                <h3 id="totalQuizzes">15</h3>
+                                <small class="text-muted">Active subjects</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="stat-icon success">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h6>Total Users</h6>
+                                <h3 id="totalUsers">0</h3>
+                                <small class="text-muted">Registered users</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="stat-icon info">
+                                <i class="fas fa-flag-checkered"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h6>Total Attempts</h6>
+                                <h3 id="totalAttempts">0</h3>
+                                <small class="text-muted">Quiz completions</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="stat-icon warning">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h6>Avg Score</h6>
+                                <h3 id="avgScore">0%</h3>
+                                <small class="text-muted">Overall average</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Top Performing Users</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="topUsers" class="user-list">
+                                    <p class="text-muted text-center">No users yet</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Most Attempted Quizzes</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="topQuizzes" class="quiz-list">
+                                    <p class="text-muted text-center">No data yet</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Manage Quizzes Section -->
+            <section id="quizzes" class="admin-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-book me-2"></i>Manage Quizzes</h2>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#quizModal">
+                        <i class="fas fa-plus me-1"></i>Add New Quiz
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Subject</th>
+                                        <th>Questions</th>
+                                        <th>Difficulty</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="quizzesTable">
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted">Loading quizzes...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Manage Questions Section -->
+            <section id="questions" class="admin-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-question-circle me-2"></i>Manage Questions</h2>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#questionModal">
+                        <i class="fas fa-plus me-1"></i>Add New Question
+                    </button>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Filter by Subject</label>
+                                <select class="form-select" id="subjectFilter" onchange="filterQuestions()">
+                                    <option value="">All Subjects</option>
+                                    <option value="mathematics">Mathematics</option>
+                                    <option value="science">Science</option>
+                                    <option value="history">History</option>
+                                    <option value="geography">Geography</option>
+                                    <option value="english">English</option>
+                                    <option value="physics">Physics</option>
+                                    <option value="chemistry">Chemistry</option>
+                                    <option value="biology">Biology</option>
+                                    <option value="computer">Computer Science</option>
+                                    <option value="arts">Arts</option>
+                                    <option value="sports">Sports</option>
+                                    <option value="literature">Literature</option>
+                                    <option value="current">Current Affairs</option>
+                                    <option value="general">General Knowledge</option>
+                                    <option value="technology">Technology</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Search Questions</label>
+                                <input type="text" class="form-control" id="questionSearch" placeholder="Search by question text..." onkeyup="filterQuestions()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div id="questionsList" class="questions-list">
+                            <p class="text-center text-muted">Loading questions...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Users Section -->
+            <section id="users" class="admin-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-users me-2"></i>Users Management</h2>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Username</th>
+                                        <th>Quizzes Taken</th>
+                                        <th>Best Score</th>
+                                        <th>Average Score</th>
+                                        <th>Joined</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTable">
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted">No users registered yet</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analytics Section -->
+            <section id="analytics" class="admin-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-chart-bar me-2"></i>Analytics</h2>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Quiz Difficulty Distribution</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="difficultyChart" class="chart-placeholder">
+                                    <p class="text-muted text-center">Easy: 5 | Medium: 5 | Hard: 5</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Score Distribution</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="scoreChart" class="chart-placeholder">
+                                    <p class="text-muted text-center">Waiting for user attempts...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Detailed Statistics</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-md-3">
+                                <h6 class="text-muted">Completion Rate</h6>
+                                <h3 id="completionRate">0%</h3>
+                            </div>
+                            <div class="col-md-3">
+                                <h6 class="text-muted">Pass Rate</h6>
+                                <h3 id="passRate">0%</h3>
+                            </div>
+                            <div class="col-md-3">
+                                <h6 class="text-muted">Most Popular</h6>
+                                <h3 id="mostPopular">-</h3>
+                            </div>
+                            <div class="col-md-3">
+                                <h6 class="text-muted">Avg Time</h6>
+                                <h3 id="avgTime">0s</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings" class="admin-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-cog me-2"></i>Settings</h2>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Quiz Settings</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Default Time Limit (seconds)</label>
+                                    <input type="number" class="form-control" id="timeLimitSetting" value="300" min="60" max="3600">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Passing Score (%)</label>
+                                    <input type="number" class="form-control" id="passingScoreSetting" value="60" min="0" max="100">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Questions per Quiz</label>
+                                    <input type="number" class="form-control" id="questionsPerQuizSetting" value="10" min="1" max="50">
+                                </div>
+                                <button class="btn btn-primary" onclick="saveSettings()">
+                                    <i class="fas fa-save me-1"></i>Save Settings
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Data Management</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted">Manage application data and perform maintenance tasks.</p>
+                                <button class="btn btn-warning w-100 mb-2" onclick="exportData()">
+                                    <i class="fas fa-download me-1"></i>Export Data
+                                </button>
+                                <button class="btn btn-info w-100 mb-2" onclick="clearAnalytics()">
+                                    <i class="fas fa-broom me-1"></i>Clear Analytics
+                                </button>
+                                <button class="btn btn-danger w-100" onclick="resetSystem()">
+                                    <i class="fas fa-redo me-1"></i>Reset System
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Quiz Modal -->
+    <div class="modal fade" id="quizModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add/Edit Quiz</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="quizForm">
+                        <div class="mb-3">
+                            <label class="form-label">Subject Name</label>
+                            <input type="text" class="form-control" id="quizName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Difficulty Level</label>
+                            <select class="form-select" id="quizDifficulty" required>
+                                <option value="Easy">Easy</option>
+                                <option value="Medium" selected>Medium</option>
+                                <option value="Hard">Hard</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" id="quizDescription" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="saveQuiz()">Save Quiz</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question Modal -->
+    <div class="modal fade" id="questionModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add/Edit Question</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="questionForm">
+                        <div class="mb-3">
+                            <label class="form-label">Subject</label>
+                            <select class="form-select" id="questionSubject" required>
+                                <option value="">Select Subject</option>
+                                <option value="mathematics">Mathematics</option>
+                                <option value="science">Science</option>
+                                <option value="history">History</option>
+                                <option value="geography">Geography</option>
+                                <option value="english">English</option>
+                                <option value="physics">Physics</option>
+                                <option value="chemistry">Chemistry</option>
+                                <option value="biology">Biology</option>
+                                <option value="computer">Computer Science</option>
+                                <option value="arts">Arts</option>
+                                <option value="sports">Sports</option>
+                                <option value="literature">Literature</option>
+                                <option value="current">Current Affairs</option>
+                                <option value="general">General Knowledge</option>
+                                <option value="technology">Technology</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Question Text</label>
+                            <textarea class="form-control" id="questionText" rows="2" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Option A</label>
+                            <input type="text" class="form-control" id="optionA" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Option B</label>
+                            <input type="text" class="form-control" id="optionB" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Option C</label>
+                            <input type="text" class="form-control" id="optionC" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Option D</label>
+                            <input type="text" class="form-control" id="optionD" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Correct Answer</label>
+                            <select class="form-select" id="correctAnswer" required>
+                                <option value="">Select Correct Option</option>
+                                <option value="0">Option A</option>
+                                <option value="1">Option B</option>
+                                <option value="2">Option C</option>
+                                <option value="3">Option D</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="saveQuestion()">Save Question</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
